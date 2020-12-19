@@ -895,7 +895,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
               ]
             ]
 		}
-		console.log(agent.context.get("symptoms"),agent.context.get("location"));
+		console.log(agent.context.get("symptoms"),agent.context.get("location"),doctors);
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
 	
