@@ -874,64 +874,56 @@ app.post('/chatBot', express.json(), (req, res)=>{
         request : req,
         response : res
     });
-    function customPayloadDemo(agent){
+    async function getDoctorDetails(agent){
+		var doctors = await user.find({type:"doctor"}).limit(5);
         var payloadData = {
             "richContent": [
               [
-                {
-                  "type": "accordion",
-                  "title": "Accordion title",
-                  "subtitle": "Accordion subtitle",
-                  "image": {
-                    "src": {
-                      "rawUrl": "https://example.com/images/logo.png"
-                    }
-                  },
-                  "text": "Accordion text"
-                }
+				doctors.map(doctor=>{
+					return {
+					"type": "accordion",
+					"title": doctor.fname,
+					"subtitle": doctor.lname,
+					"image": {
+						"src": {
+						"rawUrl": doctor.image
+						}
+					},
+					"text": doctor.description
+					}
+				})
               ]
             ]
-		  }
-		  console.log(agent.context.get("symptoms"),agent.context.get("location"));
+		}
+		console.log(agent.context.get("symptoms"),agent.context.get("location"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
-	user.find({}, function(err, alldoctors){
-		if(err){
-			console.log(err);
-		} else {
-		//    res.render("doctors",{doctors:alldoctors, noMatch: noMatch});
-			console.log(alldoctors);
-		}
 	
-	function shoWDoctorsAvailable(agent){
-
-		 var payloadData = {
-            "richContent": [
-              [
-                {
-                  "type": "accordion",
-                  "title": "Accordion title",
-                  "subtitle": "Accordion subtitle",
-                  "image": {
-                    "src": {
-                      "rawUrl": "https://example.com/images/logo.png"
-                    }
-                  },
-                  "text": "Accordion text"
-                }
-              ]
-            ]
-		  }
-		  console.log(agent.context.get("given-name"));
-        agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
-	}
-
+	// function shoWDoctorsAvailable(agent){
+	// 	 var payloadData = {
+    //         "richContent": [
+    //           [
+    //             {
+    //               "type": "accordion",
+    //               "title": "Accordion title",
+    //               "subtitle": "Accordion subtitle",
+    //               "image": {
+    //                 "src": {
+    //                   "rawUrl": "https://example.com/images/logo.png"
+    //                 }
+    //               },
+    //               "text": "Accordion text"
+    //             }
+    //           ]
+    //         ]
+	// 	  }
+	// 	  console.log(agent.context.get("given-name"));
+    //     agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
+	// }
     var intentMap = new Map();
-    intentMap.set('add_location', customPayloadDemo);
-    intentMap.set('booking_appointment', shoWDoctorsAvailable);
+    intentMap.set('add_location', getDoctorDetails);
+    // intentMap.set('booking_appointment', shoWDoctorsAvailable);
 	agent.handleRequest(intentMap);
-
-	
 });
 
 app.get("/*", function(req, res){
@@ -993,4 +985,4 @@ function escapeRegex(text) {
 
 app.listen(process.env.PORT||3000, function(){
 	console.log("The Clinicapp Server Has Started!");
-})
+});
