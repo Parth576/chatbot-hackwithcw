@@ -775,6 +775,7 @@ app.get("/doctors/:id/bookappointment/:appointmentdate",isLoggedIn,ispatient, fu
 				patientid : req.user._id
 				}, function(err, appointment){
 			if(err||!appointment){
+				console.log(err);
 				req.flash("error","An Error Occured!! Please Try Again");
 				res.redirect("back");
 			} else {
