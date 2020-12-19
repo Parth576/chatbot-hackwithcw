@@ -919,7 +919,10 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				y: response.candidates[0].location.y
 			}
 		}).then(async (location) => {
-			var doctors = (await user.find({type:"doctor"})).sort(function (a, b) {});
+			var doctors = (await user.find({type:"doctor"})).sort(function (a, b) {
+				return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
+				- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
+			}).splice(0,5);
 			var payloadData = {
 				"richContent": [
 					doctors.map(doctor=>{
@@ -985,7 +988,8 @@ app.post('/chatBot', express.json(), (req, res)=>{
 	async function diet(agent) {
 		var info = agent.context.get("any").parameters["any"];
 		console.log(info)
-
+		var data =  info.split("-");
+		
 		// var payloadData = {
 
 		// }
