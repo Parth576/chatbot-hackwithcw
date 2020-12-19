@@ -952,6 +952,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 	}
 	async function bookappointment(){
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
+		console.log(agent.context.get("date-time").parameters["date-time"]);
 		var payloadData = {
 			"richContent": [
 			  [
