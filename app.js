@@ -904,7 +904,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				doctor.schedule.map(schedule=>{
 					return {
 					"type": "accordion",
-					"title": schedule,
+					"title": `${schedule.day} ${schedule.from}:00 - ${schedule.to}:00`,
 					}
 				})
             ]
