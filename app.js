@@ -973,7 +973,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
-    intentMap.set("confirm", bookappointment);
+    intentMap.set("confirm_time", bookappointment);
 	agent.handleRequest(intentMap);
 });
 
