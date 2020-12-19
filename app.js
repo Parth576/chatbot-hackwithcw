@@ -989,7 +989,14 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var info = agent.context.get("any").parameters["any"];
 		console.log(info)
 		var data =  info.split("-");
-		
+		var body = {
+			'weight': data[0],
+			'height': data[1],
+			'age': data[2],
+			'gender': data[3],
+			'physical_activity': data[4],
+		}
+		console.log(body)
 		// var payloadData = {
 
 		// }
