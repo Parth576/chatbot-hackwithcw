@@ -926,12 +926,18 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			}).splice(0,5);
 			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
 				method: 'post',
-				body:    JSON.stringify({symptoms:[]}),
-				headers: { 'Content-Type': 'application/json' },
-			})
+				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters.symptoms.map(symptom=>symptom.replaceAll(" ","_"))}),
+				headers: { 'Content-Type': 'application/json' }
+			});
+			console.log(response);
 			var payloadData = {
 				"richContent": [
-					doctors.map(doctor=>{
+					[{
+						"type": "info",
+						"title": `You are suffering from ${response}.
+							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
+					}],
+					,doctors.map(doctor=>{
 						return {
 						"type": "accordion",
 						"title": doctor.fname,
@@ -1004,14 +1010,36 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			'physical_activity': data[4],
 		}
 		console.log(body)
+		var responseData;
 		fetch('http://d128ec39720d.ngrok.io/suggestdiet', {
 				method: 'POST',
 				body:    JSON.stringify(body),
 				headers: { 'Content-Type': 'application/json' },
-			}).then(response => {
-				console.log(response.json)
+			}).then(res => res.json())
+			.then(json => {console.log(json)
+				responseData = json
 			})
+			.catch(err => console.log(err))
 		
+		var payloadData = {		
+			"richContent": [
+				[
+				{
+					"type": "description",
+					"title": "Your recommended diet plan is: ",
+					"text": [
+					responseData['breakfast'],
+					responseData['snack1'],
+					responseData['lunch'],
+					responseData['snack2'],
+					responseData['dinner'],
+					responseData['snack3'],
+					]
+				}
+				]
+			]
+		}
+		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
