@@ -938,7 +938,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 						"title": `You are suffering from ${response}.
 							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
 					}],
-					,doctors.map(doctor=>{
+					[doctors.map(doctor=>{
 						return {
 						"type": "accordion",
 						"title": doctor.fname,
@@ -950,7 +950,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 						},
 						"text": doctor.description
 						}
-					})
+					})]
 				]
 			}
 			console.log(agent.context.get("symptoms"),agent.context.get("location"));
