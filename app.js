@@ -894,11 +894,43 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		  }
 		  console.log(agent.context.get("symptoms"),agent.context.get("location"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
-    }
+	}
+	user.find({}, function(err, alldoctors){
+		if(err){
+			console.log(err);
+		} else {
+		//    res.render("doctors",{doctors:alldoctors, noMatch: noMatch});
+			console.log(alldoctors);
+		}
+	
+	function shoWDoctorsAvailable(agent){
+
+		 var payloadData = {
+            "richContent": [
+              [
+                {
+                  "type": "accordion",
+                  "title": "Accordion title",
+                  "subtitle": "Accordion subtitle",
+                  "image": {
+                    "src": {
+                      "rawUrl": "https://example.com/images/logo.png"
+                    }
+                  },
+                  "text": "Accordion text"
+                }
+              ]
+            ]
+		  }
+		  console.log(agent.context.get("given-name"));
+        agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
+	}
+
     var intentMap = new Map();
     intentMap.set('add_location', customPayloadDemo);
+    intentMap.set('booking_appointment', shoWDoctorsAvailable);
 	agent.handleRequest(intentMap);
-	
+
 	
 });
 
