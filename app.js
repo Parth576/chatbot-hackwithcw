@@ -979,15 +979,16 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var info = agent.context.get("info").parameters.info;
 		console.log(info)
 
-		var payloadData = {
+		// var payloadData = {
 
-		}
+		// }
 		
 	}
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
 	intentMap.set("confirm_time", bookappointment);
+	intentMap.set("diet_input", diet);
 	agent.handleRequest(intentMap);
 });
 
