@@ -949,7 +949,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
-	async function bookappointment(){
+	function bookappointment(){
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
 		var payloadData = {
 			"richContent": [
@@ -973,7 +973,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
-    intentMap.set("confirm_time", bookappointment);
+    intentMap.set("confirm", shoWDoctorsTiming);
 	agent.handleRequest(intentMap);
 });
 
@@ -1021,22 +1021,6 @@ function ispatient(req, res, next){
 	req.flash("info","Only Doctors Can Access That Page");
     res.redirect("back");
 }
-
-function isadmin(req, res, next){
-	if(req.user.type=="admin"){
-	return next();
-}
-req.flash("info","Only Admins Can Access That Page");
-res.redirect("back");
-}
-
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
-
-app.listen(process.env.PORT||3000, function(){
-	console.log("The Clinicapp Server Has Started!");
-});
 
 function isadmin(req, res, next){
 	if(req.user.type=="admin"){
