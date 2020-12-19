@@ -878,7 +878,6 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var doctors = await user.find({type:"doctor"}).limit(5);
         var payloadData = {
             "richContent": [
-              [
 				doctors.map(doctor=>{
 					return {
 					"type": "accordion",
@@ -892,7 +891,6 @@ app.post('/chatBot', express.json(), (req, res)=>{
 					"text": doctor.description
 					}
 				})
-              ]
             ]
 		}
 		console.log(agent.context.get("symptoms"),agent.context.get("location"),doctors);
