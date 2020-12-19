@@ -756,9 +756,42 @@ app.post("/doctors/:id/bookappointment",isLoggedIn,ispatient, function(req, res)
 		 });
 		}
 	});
- });
+});
+
+app.get("/doctors/:id/bookappointment/:appointmentdate",isLoggedIn,ispatient, function(req, res){
+	user.findById(req.params.id, function(err, doctor){
+		if(err||!doctor){
+			req.flash("error","An Error Occured!! Please Try Again");
+			res.redirect("back");
+		} else {
+		 appointment.create(
+			 {
+				patientname : req.user.fname,
+				doctorname : doctor.fname,
+				patientcn : req.user.contactnumber,
+				doctorcn : doctor.contactnumber,
+				appointmentdate :req.body.appointmentdate,
+				doctorid : doctor._id,
+				patientid : req.user._id
+				}, function(err, appointment){
+			if(err||!appointment){
+				req.flash("error","An Error Occured!! Please Try Again");
+				res.redirect("back");
+			} else {
+				appointment.save();
+				doctor.appointments.push(appointment);
+				doctor.save();
+				req.user.appointments.push(appointment);
+				req.user.save();
+				req.flash("success","Your Appointment Request Has Been Sent .Please Wait For Confirmation");
+				res.redirect("/patienthome");
+			}
+		 });
+		}
+	});
+});
  
- app.post("/addappointment",isLoggedIn,isdoctor, function(req, res){
+app.post("/addappointment",isLoggedIn,isdoctor, function(req, res){
 	user.findById(req.user.id, function(err, doctor){
 		if(err||!doctor){
 			req.flash("error","An Error Occured!! Please Try Again");
@@ -916,9 +949,31 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
+	function bookappointment(){
+		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
+		var payloadData = {
+			"richContent": [
+			  [
+				{
+				  "type": "info",
+				  "title": "Info item title",
+				  "subtitle": "Info item subtitle",
+				  "image": {
+					"src": {
+					  "rawUrl": "https://example.com/images/logo.png"
+					}
+				  },
+				  "actionLink": `/doctors/${doctor._id}/bookappointment/${agent.context.get("date-time").parameters["date-time"]}`
+				}
+			  ]
+			]
+		}
+		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
+	}
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
+    intentMap.set("confirm_time", bookappointment);
 	agent.handleRequest(intentMap);
 });
 
@@ -966,6 +1021,22 @@ function ispatient(req, res, next){
 	req.flash("info","Only Doctors Can Access That Page");
     res.redirect("back");
 }
+
+function isadmin(req, res, next){
+	if(req.user.type=="admin"){
+	return next();
+}
+req.flash("info","Only Admins Can Access That Page");
+res.redirect("back");
+}
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+app.listen(process.env.PORT||3000, function(){
+	console.log("The Clinicapp Server Has Started!");
+});
 
 function isadmin(req, res, next){
 	if(req.user.type=="admin"){
