@@ -924,8 +924,8 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
 				- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
 			}).splice(0,5);
-			const response = await fetch('https://www.nerdsofafeather.ml/server/predictdisease', {
-				method: 'post',
+			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
+				method: 'POST',
 				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
 				headers: { 'Content-Type': 'application/json' }
 			});
@@ -934,7 +934,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				"richContent": [
 					[{
 						"type": "info",
-						"title": `You are suffering from ${response}.
+						"title": `You are suffering from chronic disease.
 							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
 					}],
 					[...doctors.map(doctor=>{
@@ -1001,7 +1001,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var info = agent.context.get("any").parameters["any"];
 		console.log(info)
 		var data =  info.split("-");
-		var body = {
+		var requestBody = {
 			'name': 'Mehdi',
 			'weight': data[0],
 			'height': data[1],
@@ -1009,37 +1009,32 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			'gender': data[3],
 			'physical_activity': data[4],
 		}
-		console.log(body)
 		var responseData;
-		fetch('http://d128ec39720d.ngrok.io/suggestdiet', {
-				method: 'POST',
-				body:    JSON.stringify(body),
-				headers: { 'Content-Type': 'application/json' },
-			}).then(res => res.json())
-			.then(json => {
-				responseData = json
-				console.log(responseData)
-				var payloadData = {		
-					"richContent": [
-						[
-						{
-							"type": "description",
-							"title": "Your recommended diet plan is: ",
-							"text": [
-							responseData['breakfast'],
-							responseData['snack1'],
-							responseData['lunch'],
-							responseData['snack2'],
-							responseData['dinner'],
-							responseData['snack3'],
-							]
-						}
-						]
+		
+		const response = await fetch('http://d128ec39720d.ngrok.io/suggestdiet', {method: 'POST', body: JSON.stringify(requestBody), headers: { 'Content-Type': 'application/json' }});
+        const json = await response.json();
+		console.log(json)
+		var payloadData = {		
+			"richContent": [
+				[
+				{
+					"type": "description",
+					"title": "Your recommended diet plan is: ",
+					"text": [
+					json['breakfast'],
+					json['snack1'],
+					json['lunch'],
+					json['snack2'],
+					json['dinner'],
+					json['snack3'],
 					]
 				}
-				agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
-			})
-			.catch(err => console.log(err))
+				]
+			]
+		}
+		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
+		
+		
 	}
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
