@@ -897,30 +897,24 @@ app.post('/chatBot', express.json(), (req, res)=>{
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
 	
-	// function shoWDoctorsAvailable(agent){
-	// 	 var payloadData = {
-    //         "richContent": [
-    //           [
-    //             {
-    //               "type": "accordion",
-    //               "title": "Accordion title",
-    //               "subtitle": "Accordion subtitle",
-    //               "image": {
-    //                 "src": {
-    //                   "rawUrl": "https://example.com/images/logo.png"
-    //                 }
-    //               },
-    //               "text": "Accordion text"
-    //             }
-    //           ]
-    //         ]
-	// 	  }
-	// 	  console.log(agent.context.get("given-name"));
-    //     agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
-	// }
+	function shoWDoctorsTiming(agent){
+		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
+		var payloadData = {
+            "richContent": [
+				doctor.schedule.map(schedule=>{
+					return {
+					"type": "accordion",
+					"title": schedule,
+					}
+				})
+            ]
+		}
+		console.log(agent.context.get("given-name"));
+        agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
+	}
     var intentMap = new Map();
-    intentMap.set('add_location', getDoctorDetails);
-    // intentMap.set('booking_appointment', shoWDoctorsAvailable);
+    intentMap.set("add_location", getDoctorDetails);
+    intentMap.set("show_doctors_timing", shoWDoctorsTiming);
 	agent.handleRequest(intentMap);
 });
 
