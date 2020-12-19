@@ -949,7 +949,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
-	function bookappointment(){
+	async function bookappointment(){
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
 		var payloadData = {
 			"richContent": [
@@ -973,7 +973,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
-    intentMap.set("confirm", shoWDoctorsTiming);
+    intentMap.set("confirm", bookappointment);
 	agent.handleRequest(intentMap);
 });
 
