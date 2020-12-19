@@ -1037,6 +1037,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 						]
 					]
 				}
+				agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 			})
 			.catch(err => console.log(err))
 	}
