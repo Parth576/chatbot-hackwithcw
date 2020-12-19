@@ -924,10 +924,9 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
 				- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
 			}).splice(0,5);
-			console.log("sex",agent.context.get("symptoms").parameters["symptoms"].map(symptom=>String(symptom).replaceAll(" ","_")));
-			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
+			const response = await fetch('https://www.nerdsofafeather.ml/server/predictdisease', {
 				method: 'post',
-				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.replaceAll(" ","_"))}),
+				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
 				headers: { 'Content-Type': 'application/json' }
 			});
 			console.log(response);
@@ -938,7 +937,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 						"title": `You are suffering from ${response}.
 							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
 					}],
-					[doctors.map(doctor=>{
+					[...doctors.map(doctor=>{
 						return {
 						"type": "accordion",
 						"title": doctor.fname,
