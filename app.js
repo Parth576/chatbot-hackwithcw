@@ -963,7 +963,6 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				{
 				  "type": "info",
 				  "title": "Click here to send Booking request",
-				  "subtitle": "Info item subtitle",
 				  "image": {
 					"src": {
 					  "rawUrl": "https://example.com/images/logo.png"
