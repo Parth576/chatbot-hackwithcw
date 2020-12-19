@@ -949,7 +949,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
-	function bookappointment(){
+	async function bookappointment(){
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
 		var payloadData = {
 			"richContent": [
