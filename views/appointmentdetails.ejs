@@ -34,6 +34,7 @@
                     </div>
                 </form><% }%>
             <% if(appointment.status == "C"){%>
+            <a class="btn btn-success" href="/videoCall/<%= appointment._id %>">Or Join Virtual Meet</a>
             <form id="form" action="/doctorhome/<%= pm.id %>" method="POST">
                 <h1 style="text-align: center">Add Description</h1>
                 <div class="form-group">

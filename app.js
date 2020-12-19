@@ -903,6 +903,10 @@ app.get("/patienthome/:id",isLoggedIn,ispatient, function(req, res){
     });
 });
 
+app.get("/videoCall/:id",isLoggedIn,function(req, res){
+	res.render("videoCall",{id:req.params.id});
+});
+
 app.post('/chatBot', express.json(), (req, res)=>{
     const agent = new dfff.WebhookClient({
         request : req,
@@ -950,7 +954,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
-	async function bookappointment(){
+	async function bookappointment(agent){
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
 		console.log(agent.context.get("date-time").parameters["date-time"]);
 		var payloadData = {
@@ -958,7 +962,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			  [
 				{
 				  "type": "info",
-				  "title": "Info item title",
+				  "title": "Click here to send Booking request",
 				  "subtitle": "Info item subtitle",
 				  "image": {
 					"src": {
@@ -972,10 +976,19 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		}
 		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
+	async function diet(agent) {
+		var info = agent.context.get("info").parameters.info;
+		console.log(info)
+
+		var payloadData = {
+
+		}
+		
+	}
     var intentMap = new Map();
     intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
-    intentMap.set("confirm_time", bookappointment);
+	intentMap.set("confirm_time", bookappointment);
 	agent.handleRequest(intentMap);
 });
 
