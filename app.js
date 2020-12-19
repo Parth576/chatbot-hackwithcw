@@ -914,46 +914,45 @@ app.post('/chatBot', express.json(), (req, res)=>{
         response : res
     });
     async function getDoctorDetails(agent){
-		geocode(agent.context.get("location").parameters["location.original"]).then((response) => {
-			return  {
-				x: response.candidates[0].location.x,
-				y: response.candidates[0].location.y
-			}
-		}).then(async (location) => {
-			var doctors = (await user.find({type:"doctor"})).sort(function (a, b) {
-				return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
-				- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
-			}).splice(0,5);
-			const response = await (await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
-				method: 'POST',
-				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
-				headers: { 'Content-Type': 'application/json' }
-			})).json();
-			console.log(response);
-			var payloadData = {
-				"richContent": [
-					[{
-						"type": "info",
-						"title": `You are suffering from chronic disease.
-							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
-					}],
-					[...doctors.map(doctor=>{
-						return {
-						"type": "accordion",
-						"title": doctor.fname,
-						"subtitle": doctor.lname,
-						"image": {
-							"src": {
-							"rawUrl": doctor.image
-							}
-						},
-						"text": doctor.description
+		const resp = await geocode(agent.context.get("location").parameters["location.original"]);
+		const location = {
+			x: resp.candidates[0].location.x,
+			y: resp.candidates[0].location.y
+		}
+		var doctors = (await user.find({type:"doctor"})).sort(function (a, b) {
+			return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
+			- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
+		}).splice(0,5);
+		const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
+			method: 'POST',
+			body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
+			headers: { 'Content-Type': 'application/json' }
+		})
+		const res = await response.json();
+		console.log(res);
+		var payloadData = {
+			"richContent": [
+				[{
+					"type": "info",
+					"title": `You are suffering from ${res.result}.
+						We have found the following doctors nearest to your location best treating the disease you are suffering from`,
+				}],
+				[...doctors.map(doctor=>{
+					return {
+					"type": "accordion",
+					"title": doctor.fname,
+					"subtitle": doctor.lname,
+					"image": {
+						"src": {
+						"rawUrl": doctor.image
 						}
-					})]
-				]
-			}
-			agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
-		});
+					},
+					"text": doctor.description
+					}
+				})]
+			]
+		}
+		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
 	
 	async function shoWDoctorsTiming(agent){
@@ -997,46 +996,124 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
 	async function diet(agent) {
-		var info = agent.context.get("any").parameters["any"];
-		console.log(info)
-		var data =  info.split("-");
-		var requestBody = {
-			'name': 'Mehdi',
-			'weight': data[0],
-			'height': data[1],
-			'age': data[2],
-			'gender': data[3],
-			'physical_activity': data[4],
-		}
-		var responseData;
-		
-		const response = await fetch('http://d128ec39720d.ngrok.io/suggestdiet', {method: 'POST', body: JSON.stringify(requestBody), headers: { 'Content-Type': 'application/json' }});
-        const json = await response.json();
-		console.log(json)
-		var payloadData = {		
-			"richContent": [
-				[
-				{
-					"type": "accordion",
-					"title": "Your recommended diet plan is: ",
-					"text": [
-					`${json['breakfast']}`,
-					json['snack1'],
-					json['lunch'],
-					json['snack2'],
-					json['dinner'],
-					json['snack3'],
-					]
-				}
-				]
-			]
-		}
-		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
-		
-		
-	}
-    var intentMap = new Map();
-    intentMap.set("add_location", getDoctorDetails);
+    var info = agent.context.get("any").parameters["any"];
+    console.log(info);
+    var data = info.split("-");
+    var requestBody = {
+      name: "Mehdi",
+      weight: data[0],
+      height: data[1],
+      age: data[2],
+      gender: data[3],
+      physical_activity: data[4],
+    };
+    var responseData;
+
+    const response = await fetch("http://d128ec39720d.ngrok.io/suggestdiet", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: { "Content-Type": "application/json" },
+    });
+    const json = await response.json();
+    console.log(json);
+    var payloadData = {
+      richContent: [
+        [
+          {
+            type: "info",
+            title: "Your recommended diet plan is: ",
+          },
+        ],
+        [
+          {
+            type: "list",
+            title: "Breakfast",
+            subtitle: json["breakfast"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "list",
+            title: "Snack 1",
+            subtitle: json["snack1"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "list",
+            title: "Lunch",
+            subtitle: json["lunch"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "list",
+            title: "Snack 2",
+            subtitle: json["snack2"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+          },
+          {
+            type: "divider",
+		  },
+		  {
+            type: "list",
+            title: "Dinner",
+            subtitle: json["dinner"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+		  },
+		  {
+            type: "divider",
+		  },
+		  {
+            type: "list",
+            title: "Snack 3",
+            subtitle: json["snack3"],
+            event: {
+              name: "",
+              languageCode: "",
+              parameters: {},
+            },
+		  },
+
+        ],
+      ],
+    };
+
+    agent.add(
+      new dfff.Payload(agent.UNSPECIFIED, payloadData, {
+        sendAsMessage: true,
+        rawPayload: true,
+      })
+    );
+  }
+  var intentMap = new Map();
+  intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
 	intentMap.set("confirm_time", bookappointment);
 	intentMap.set("diet_input", diet);
