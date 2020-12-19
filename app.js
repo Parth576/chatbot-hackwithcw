@@ -913,26 +913,33 @@ app.post('/chatBot', express.json(), (req, res)=>{
         response : res
     });
     async function getDoctorDetails(agent){
-		var doctors = await user.find({type:"doctor"}).limit(5);
-        var payloadData = {
-            "richContent": [
-				doctors.map(doctor=>{
-					return {
-					"type": "accordion",
-					"title": doctor.fname,
-					"subtitle": doctor.lname,
-					"image": {
-						"src": {
-						"rawUrl": doctor.image
+		geocode(agent.context.get("location").parameters["location.original"]).then((response) => {
+			return  {
+				x: response.candidates[0].location.x,
+				y: response.candidates[0].location.y
+			}
+		}).then(async (location) => {
+			var doctors = (await user.find({type:"doctor"})).sort(function (a, b) {});
+			var payloadData = {
+				"richContent": [
+					doctors.map(doctor=>{
+						return {
+						"type": "accordion",
+						"title": doctor.fname,
+						"subtitle": doctor.lname,
+						"image": {
+							"src": {
+							"rawUrl": doctor.image
+							}
+						},
+						"text": doctor.description
 						}
-					},
-					"text": doctor.description
-					}
-				})
-            ]
-		}
-		console.log(agent.context.get("symptoms"),agent.context.get("location"),doctors);
-        agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
+					})
+				]
+			}
+			console.log(agent.context.get("symptoms"),agent.context.get("location"));
+			agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
+		});
 	}
 	
 	async function shoWDoctorsTiming(agent){
@@ -976,7 +983,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
 	async function diet(agent) {
-		var info = agent.context.get("info").parameters.info;
+		var info = agent.context.get("any").parameters["any"];
 		console.log(info)
 
 		// var payloadData = {
