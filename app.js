@@ -902,7 +902,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var payloadData = {
             "richContent": [
 				[{
-					"type": "text",
+					"type": "info",
 					"title": "The available timings are: ",
 				}],
 				[...doctor.schedule.map(schedule=>{
