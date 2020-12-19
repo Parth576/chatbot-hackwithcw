@@ -926,7 +926,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			}).splice(0,5);
 			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
 				method: 'post',
-				body:    JSON.stringify({symptoms:}),
+				body:    JSON.stringify({symptoms:[]}),
 				headers: { 'Content-Type': 'application/json' },
 			})
 			var payloadData = {
