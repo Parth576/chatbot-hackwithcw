@@ -891,12 +891,15 @@ app.post('/chatBot', express.json(), (req, res)=>{
                 }
               ]
             ]
-          }
-          agent.add( new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
+		  }
+		  console.log(agent.context.get("symptoms"));
+        agent.add( new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
     }
     var intentMap = new Map();
     intentMap.set('ask_for_symptoms', customPayloadDemo);
-    agent.handleRequest(intentMap);
+	agent.handleRequest(intentMap);
+	
+	
 });
 
 app.get("/*", function(req, res){
