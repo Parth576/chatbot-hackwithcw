@@ -965,7 +965,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 					  "rawUrl": "https://example.com/images/logo.png"
 					}
 				  },
-				  "actionLink": `/doctors/${doctor._id}/bookappointment/${agent.context.get("date-time").parameters["date-time"]}`
+				  "actionLink": `/doctors/${doctor._id}/bookappointment/${agent.context.get("date-time").parameters["date-time"].date_time}`
 				}
 			  ]
 			]
