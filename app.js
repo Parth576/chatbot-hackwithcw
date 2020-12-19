@@ -901,7 +901,11 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
 		var payloadData = {
             "richContent": [
-				doctor.schedule.map(schedule=>{
+				{
+					"type": "text",
+					"title": "The available timings are: ",
+				}
+				,...doctor.schedule.map(schedule=>{
 					return {
 					"type": "accordion",
 					"title": `${schedule.day} ${schedule.from}:00 - ${schedule.to}:00`,
