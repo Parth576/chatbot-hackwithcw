@@ -18,6 +18,7 @@ var express					= require("express"),
 	days 					=["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
 	faker 					= require("faker"),
 	flash       			= require("connect-flash"),
+	fetch                   = require("node-fetch")
 	databaseURL 			= process.env.DATABASEURL || 'mongodb://localhost/clinicapp';
 	arcgisRestGeocoding = require('@esri/arcgis-rest-geocoding'),
 	{ geocode } = arcgisRestGeocoding,
@@ -923,6 +924,11 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
 				- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
 			}).splice(0,5);
+			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
+				method: 'post',
+				body:    JSON.stringify({symptoms:}),
+				headers: { 'Content-Type': 'application/json' },
+			})
 			var payloadData = {
 				"richContent": [
 					doctors.map(doctor=>{
@@ -990,6 +996,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(info)
 		var data =  info.split("-");
 		var body = {
+			'name': 'Mehdi',
 			'weight': data[0],
 			'height': data[1],
 			'age': data[2],
@@ -997,9 +1004,13 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			'physical_activity': data[4],
 		}
 		console.log(body)
-		// var payloadData = {
-
-		// }
+		fetch('http://d128ec39720d.ngrok.io/suggestdiet', {
+				method: 'POST',
+				body:    JSON.stringify(body),
+				headers: { 'Content-Type': 'application/json' },
+			}).then(response => {
+				console.log(response.json)
+			})
 		
 	}
     var intentMap = new Map();
