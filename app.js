@@ -927,7 +927,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			console.log("sex",agent.context.get("symptoms").parameters["symptoms"]);
 			const response = await fetch('http://d128ec39720d.ngrok.io/predictdisease', {
 				method: 'post',
-				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters.symptoms.map(symptom=>symptom.replaceAll(" ","_"))}),
+				body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.replaceAll(" ","_"))}),
 				headers: { 'Content-Type': 'application/json' }
 			});
 			console.log(response);
@@ -1017,8 +1017,9 @@ app.post('/chatBot', express.json(), (req, res)=>{
 				body:    JSON.stringify(body),
 				headers: { 'Content-Type': 'application/json' },
 			}).then(res => res.json())
-			.then(json => {console.log(json)
+			.then(json => {
 				responseData = json
+				console.log(responseData)
 				var payloadData = {		
 					"richContent": [
 						[
