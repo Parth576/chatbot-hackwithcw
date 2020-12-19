@@ -770,7 +770,7 @@ app.get("/doctors/:id/bookappointment/:appointmentdate",isLoggedIn,ispatient, fu
 				doctorname : doctor.fname,
 				patientcn : req.user.contactnumber,
 				doctorcn : doctor.contactnumber,
-				appointmentdate :req.body.appointmentdate,
+				appointmentdate :req.params.appointmentdate,
 				doctorid : doctor._id,
 				patientid : req.user._id
 				}, function(err, appointment){
