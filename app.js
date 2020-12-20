@@ -941,7 +941,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 					...doctors.map(doctor=>{
 						return {
 							"type": "image",
-							"rawUrl": "https://example.com/images/logo.png",
+							"rawUrl": doctor.image,
 							"accessibilityText": "Dialogflow across platforms"
 						}
 					})
