@@ -937,6 +937,15 @@ app.post('/chatBot', express.json(), (req, res)=>{
 					"title": `You are suffering from ${res.result}.
 						We have found the following doctors nearest to your location best treating the disease you are suffering from`,
 				}],
+				[
+					...doctors.map(doctor=>{
+						return {
+							"type": "image",
+							"rawUrl": "https://example.com/images/logo.png",
+							"accessibilityText": "Dialogflow across platforms"
+						}
+					})
+				],
 				[...doctors.map(doctor=>{
 					return {
 					"type": "accordion",
