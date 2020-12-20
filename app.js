@@ -934,7 +934,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			"richContent": [
 				[{
 					"type": "info",
-					"title": `You are suffering from ${res.result}.
+					"title": `You might suffering from ${res.result}.
 						We have found the following doctors nearest to your location best treating the disease you are suffering from`,
 				}],
 				// [
