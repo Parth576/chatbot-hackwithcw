@@ -968,155 +968,192 @@ app.post('/chatBot', express.json(), (req, res)=>{
 	}
 	
 	async function shoWDoctorsTiming(agent){
-		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
-		var payloadData = {
-            "richContent": [
-				[{
-					"type": "info",
-					"title": "The available timings are: ",
-				}],
-				[...doctor.schedule.map(schedule=>{
-					return {
-					"type": "accordion",
-					"title": `${schedule.day} ${schedule.from}:00 - ${schedule.to}:00`,
-					}
-				})],
-            ]
+		try{
+			var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
+			var payloadData = {
+				"richContent": [
+					[{
+						"type": "info",
+						"title": "The available timings are: ",
+					}],
+					[...doctor.schedule.map(schedule=>{
+						return {
+						"type": "accordion",
+						"title": `${schedule.day} ${schedule.from}:00 - ${schedule.to}:00`,
+						}
+					})],
+				]
+			}
+			console.log(agent.context.get("given-name"));
+		} catch(err) {
+			console.log(err);
+			var payloadData = {
+				"richContent": [
+					[{
+						"type": "info",
+						"title": `I couldn't understand you.'`,
+					}]
+				]
+			}
 		}
-		console.log(agent.context.get("given-name"));
         agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
 	async function bookappointment(agent){
-		var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
-		console.log(agent.context.get("date-time").parameters["date-time"]);
-		var payloadData = {
-			"richContent": [
-			  [
-				{
-				  "type": "info",
-				  "title": "Click here to send Booking request",
-				  "image": {
-					"src": {
-					  "rawUrl": "https://example.com/images/logo.png"
+		try{
+			var doctor = await user.findOne({type:"doctor",fname:agent.context.get("given-name").parameters["given-name"]});
+			console.log(agent.context.get("date-time").parameters["date-time"]);
+			var payloadData = {
+				"richContent": [
+				[
+					{
+					"type": "info",
+					"title": "Click here to send Booking request",
+					"image": {
+						"src": {
+						"rawUrl": "https://example.com/images/logo.png"
+						}
+					},
+					"actionLink": `/doctors/${doctor._id}/bookappointment/${agent.context.get("date-time").parameters["date-time"].date_time}`
 					}
-				  },
-				  "actionLink": `/doctors/${doctor._id}/bookappointment/${agent.context.get("date-time").parameters["date-time"].date_time}`
-				}
-			  ]
-			]
+				]
+				]
+			}
+		}
+		catch(err){
+			console.log(err);
+			var payloadData = {
+				"richContent": [
+					[{
+						"type": "info",
+						"title": `I couldn't understand you.'`,
+					}]
+				]
+			}
 		}
 		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true })) 
 	}
 	async function diet(agent) {
-    var info = agent.context.get("any").parameters["any"];
-    console.log(info);
-    var data = info.split("-");
-    var requestBody = {
-      name: "Mehdi",
-      weight: data[0],
-      height: data[1],
-      age: data[2],
-      gender: data[3],
-      physical_activity: data[4],
-    };
-    var responseData;
+	try{
+		var info = agent.context.get("any").parameters["any"];
+		console.log(info);
+		var data = info.split("-");
+		var requestBody = {
+		name: "Mehdi",
+		weight: data[0],
+		height: data[1],
+		age: data[2],
+		gender: data[3],
+		physical_activity: data[4],
+		};
+		var responseData;
 
-    const response = await fetch("http://f49d74e4066c.ngrok.io/suggestdiet", {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await response.json();
-    console.log(json);
-    var payloadData = {
-      richContent: [
-        [
-          {
-            type: "info",
-            title: "Your recommended diet plan is: ",
-          },
-        ],
-        [
-          {
-            type: "list",
-            title: "Breakfast",
-            subtitle: json["breakfast"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-          },
-          {
-            type: "divider",
-          },
-          {
-            type: "list",
-            title: "Snack 1",
-            subtitle: json["snack1"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-          },
-          {
-            type: "divider",
-          },
-          {
-            type: "list",
-            title: "Lunch",
-            subtitle: json["lunch"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-          },
-          {
-            type: "divider",
-          },
-          {
-            type: "list",
-            title: "Snack 2",
-            subtitle: json["snack2"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-          },
-          {
-            type: "divider",
-		  },
-		  {
-            type: "list",
-            title: "Dinner",
-            subtitle: json["dinner"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-		  },
-		  {
-            type: "divider",
-		  },
-		  {
-            type: "list",
-            title: "Snack 3",
-            subtitle: json["snack3"],
-            event: {
-              name: "",
-              languageCode: "",
-              parameters: {},
-            },
-		  },
-
-        ],
-      ],
-    };
-
+		const response = await fetch("http://f49d74e4066c.ngrok.io/suggestdiet", {
+		method: "POST",
+		body: JSON.stringify(requestBody),
+		headers: { "Content-Type": "application/json" },
+		});
+		const json = await response.json();
+		console.log(json);
+		var payloadData = {
+		richContent: [
+			[
+			{
+				type: "info",
+				title: "Your recommended diet plan is: ",
+			},
+			],
+			[
+			{
+				type: "list",
+				title: "Breakfast",
+				subtitle: json["breakfast"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			{
+				type: "divider",
+			},
+			{
+				type: "list",
+				title: "Snack 1",
+				subtitle: json["snack1"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			{
+				type: "divider",
+			},
+			{
+				type: "list",
+				title: "Lunch",
+				subtitle: json["lunch"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			{
+				type: "divider",
+			},
+			{
+				type: "list",
+				title: "Snack 2",
+				subtitle: json["snack2"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			{
+				type: "divider",
+			},
+			{
+				type: "list",
+				title: "Dinner",
+				subtitle: json["dinner"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			{
+				type: "divider",
+			},
+			{
+				type: "list",
+				title: "Snack 3",
+				subtitle: json["snack3"],
+				event: {
+				name: "",
+				languageCode: "",
+				parameters: {},
+				},
+			},
+			],
+		],
+		};
+	}
+	catch(err){
+		console.log(err);
+		var payloadData = {
+			"richContent": [
+				[{
+					"type": "info",
+					"title": `I couldn't understand you.'`,
+				}]
+			]
+		}
+	}
+    
     agent.add(
       new dfff.Payload(agent.UNSPECIFIED, payloadData, {
         sendAsMessage: true,
