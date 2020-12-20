@@ -927,39 +927,42 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			method: 'POST',
 			body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
 			headers: { 'Content-Type': 'application/json' }
-		})
-		const res = await response.json();
-		console.log(res);
-		var payloadData = {
-			"richContent": [
-				[{
-					"type": "info",
-					"title": `You might suffering from ${res.result}.
-						We have found the following doctors nearest to your location best treating the disease you are suffering from`,
-				}],
-				// [
-				// 	...doctors.map(doctor=>{
-				// 		return {
-				// 			"type": "image",
-				// 			"rawUrl": doctor.image,
-				// 			"accessibilityText": "Dialogflow across platforms"
-				// 		}
-				// 	})
-				// ],
-				[...doctors.map(doctor=>{
-					return {
-					"type": "accordion",
-					"title": doctor.fname,
-					"subtitle": doctor.lname,
-					"image": {
-						"src": {
-						"rawUrl": doctor.image
+		});
+		try{
+			const res = await response.json();
+			console.log(res);
+			var payloadData = {
+				"richContent": [
+					[{
+						"type": "info",
+						"title": `You might suffering from ${res.result}.
+							We have found the following doctors nearest to your location best treating the disease you are suffering from`,
+					}],
+					[...doctors.map(doctor=>{
+						return {
+						"type": "accordion",
+						"title": doctor.fname,
+						"subtitle": doctor.lname,
+						"image": {
+							"src": {
+							"rawUrl": doctor.image
+							}
+						},
+						"text": doctor.description
 						}
-					},
-					"text": doctor.description
-					}
-				})]
-			]
+					})]
+				]
+			}
+		} catch(err) {
+			console.log(err);
+			var payloadData = {
+				"richContent": [
+					[{
+						"type": "info",
+						"title": `I couldn't understand you.'`,
+					}]
+				]
+			}
 		}
 		agent.add(new dfff.Payload(agent.UNSPECIFIED, payloadData, {sendAsMessage: true, rawPayload: true }))
 	}
