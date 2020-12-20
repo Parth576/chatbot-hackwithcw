@@ -1121,11 +1121,17 @@ app.post('/chatBot', express.json(), (req, res)=>{
       })
     );
   }
+  function defaultFallback(agent) {
+    agent.add(
+      "Sorry! I am unable to understand this at the moment. I am still learning humans. You can pick any of the service that might help me."
+    );
+  }
   var intentMap = new Map();
   intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
 	intentMap.set("confirm_time", bookappointment);
 	intentMap.set("diet_input", diet);
+	intentMap.set("Default Fallback Intent", defaultFallback);
 	agent.handleRequest(intentMap);
 });
 
