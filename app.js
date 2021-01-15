@@ -923,7 +923,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
 			- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
 		}).splice(0,5);
-		const response = await fetch('http://de428317bc7e.ngrok.io/predictdisease', {
+		const response = await fetch('http://bf321262de7b.ngrok.io/predictdisease', {
 			method: 'POST',
 			body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
 			headers: { 'Content-Type': 'application/json' }
@@ -1047,7 +1047,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		};
 		var responseData;
 
-		const response = await fetch("http://de428317bc7e.ngrok.io/suggestdiet", {
+		const response = await fetch("http://bf321262de7b.ngrok.io/suggestdiet", {
 		method: "POST",
 		body: JSON.stringify(requestBody),
 		headers: { "Content-Type": "application/json" },
@@ -1235,3 +1235,9 @@ function escapeRegex(text) {
 app.listen(process.env.PORT||3000, function(){
 	console.log("The Clinicapp Server Has Started!");
 });
+
+
+
+
+
+// "Weight(in kg)-height(in cm)-Age-Gender(Male or Female)-Physical Exercise(1 - no exercise, 2 - 1 to 3 days a week, 3 - 3 to 5 days a week, 4 - 6 to 7 days a week, 5 - Twice a day)."
