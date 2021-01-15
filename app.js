@@ -1047,7 +1047,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 		console.log(requestBody);
 		var responseData;
 
-		const response = await fetch("http://bf321262de7b.ngrok.io/suggestdiet", {
+		const response = await fetch("http://3aef0b6d7a41.ngrok.io/suggestdiet", {
 		method: "POST",
 		body: JSON.stringify(requestBody),
 		headers: { "Content-Type": "application/json" },
