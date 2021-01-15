@@ -923,7 +923,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
 			return ((Number(a.loc.x)-Number(location.x))**2+(Number(a.loc.y)-Number(location.y))**2)**0.5
 			- ((Number(b.loc.x)-Number(location.x))**2+(Number(b.loc.y)-Number(location.y))**2)**0.5;
 		}).splice(0,5);
-		const response = await fetch('http://127.0.0.1/predictdisease', {
+		const response = await fetch('http://c3d4ac1a8a5f.ngrok.io/predictdisease', {
 			method: 'POST',
 			body:    JSON.stringify({symptoms:agent.context.get("symptoms").parameters["symptoms"].map(symptom=>symptom.split(" ").join("_"))}),
 			headers: { 'Content-Type': 'application/json' }
