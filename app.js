@@ -1034,17 +1034,17 @@ app.post('/chatBot', express.json(), (req, res)=>{
 	}
 	async function diet(agent) {
 	try{
-		var info = agent.context.get("any").parameters["any"];
-		console.log(info);
-		var data = info.split("-");
+		var info = agent.context.get("phys_exercise").parameters["phys_exercise"];
 		var requestBody = {
 		name: "Mehdi",
-		weight: data[0],
-		height: data[1],
-		age: data[2],
-		gender: data[3],
-		physical_activity: data[4],
+		weight: agent.context.get("weight").parameters["weight"],
+		height: agent.context.get("height").parameters["height"],
+		age: agent.context.get("age").parameters["age"],
+		gender: agent.context.get("gender").parameters["gender"],
+		physical_activity: info,
 		};
+
+		console.log(requestBody);
 		var responseData;
 
 		const response = await fetch("http://bf321262de7b.ngrok.io/suggestdiet", {
@@ -1170,7 +1170,7 @@ app.post('/chatBot', express.json(), (req, res)=>{
   intentMap.set("add_location", getDoctorDetails);
     intentMap.set("show_doctors_timing", shoWDoctorsTiming);
 	intentMap.set("confirm_time", bookappointment);
-	intentMap.set("diet_input", diet);
+	intentMap.set("ask physical exercise", diet);
 	intentMap.set("Default Fallback Intent", defaultFallback);
 	agent.handleRequest(intentMap);
 });
