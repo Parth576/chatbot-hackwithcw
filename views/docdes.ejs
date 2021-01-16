@@ -43,16 +43,16 @@
 <div class="section lb">
     <div class="container">
         <div class="row">
-            <h1 style="text-align: center"><u>Doctor Details</u></h1>
             <div style="width: 70%; margin: 25px auto;">
-                <legend>Add a brief description</legend>
+                <h1 style="text-align: center"><u>Doctor Details</u></h1>
                 <form id="form" action="/details/<%= pm.id %>" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <textarea class="textarea" form="form" class="form-control" name="description"
-                            placeholder="Description" required></textarea>
-                    </div>
+                        <label for="exampleInputEmail1">Description</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Add a brief description">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your details with anyone else.</small>
+                      </div>
                     <fieldset>
-                        <legend>Choose your timings</legend>
+                        <label for="exampleInputEmail1">Choose your Timings</label>
                         <div class="form-group">
                             <table>
                                 <tr>
@@ -99,8 +99,9 @@
                                 </tr>
                             </table>
                             <div class="form-group">
-                                <legend style="margin-top: 1%;">Address</legend>
-                                <textarea class="textarea" form="form" name="address" placeholder="Address"
+                                <label style="font-size:20" >Address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Add a brief description">
+                                <textarea class="textarea form-control" form="form" name="address" placeholder="Address"
                                     id=""></textarea>
                             </div>
                             <div class="form-group">
