@@ -26,7 +26,7 @@ var express					= require("express"),
 	dfff = require('dialogflow-fulfillment');
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
-app.use(express.static('pubic'));
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
 app.use(expressSanitizer());
