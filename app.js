@@ -26,7 +26,7 @@ var express					= require("express"),
 	dfff = require('dialogflow-fulfillment');
 
 mongoose.connect(databaseURL, { useNewUrlParser: true });
-app.use(express.static('public'));
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended : true}));
 app.set("view engine","ejs");
 app.use(expressSanitizer());
@@ -619,7 +619,7 @@ app.get("/doctors",function(req,res){
     }
 });
 
-app.get("/doctors/:id",function(req, res, next){
+app.get("/:id",function(req, res, next){
 	user.findById(req.params.id, function(err, doctor){
         if(err||!doctor){
 			req.flash("error","Doctor Not Found");

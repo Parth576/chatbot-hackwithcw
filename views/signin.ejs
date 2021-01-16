@@ -1,72 +1,126 @@
 <% include partials/header %>
+<script>
+
+$(function () {
+    $('input, select').on('focus', function () {
+        $(this).parent().find('.input-group-text').css('border-color', '#80bdff');
+    });
+    $('input, select').on('blur', function () {
+        $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
+    });
+});
+
+</script>
+
 <style>
-    body{
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-        background: snow;
+    .border-md {
+        border-width: 2px;
     }
-    .box{
-        width: 500px;
-        padding: 40px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        background: #191919;
-        text-align: center;
+
+    .btn-facebook {
+        background: #405D9D;
+        border: none;
     }
-    .box h1{
-        color: white;
-        text-transform: uppercase;
-        font-weight: 500;
+
+    .btn-facebook:hover,
+    .btn-facebook:focus {
+        background: #314879;
     }
-    .box input[type = "text"],.box input[type = "password"]{
-        border:0;
-        background: none;
-        display: block;
-        margin: 20px auto;
-        text-align: center;
-        border: 2px solid #3498db;
-        padding: 14px 10px;
-        width: 200px;
-        outline: none;
-        color: white;
-        border-radius: 24px;
-        transition: 0.25s;
+
+    .btn-twitter {
+        background: #42AEEC;
+        border: none;
     }
-    .box input[type = "text"]:focus,.box input[type = "password"]:focus{
-        width: 280px;
-        border-color: #2ecc71;
+
+    .btn-twitter:hover,
+    .btn-twitter:focus {
+        background: #1799e4;
     }
-    .box input[type = "submit"]{
-        border:0;
-        background: none;
-        display: block;
-        margin: 20px auto;
-        text-align: center;
-        border: 2px solid #2ecc71;
-        padding: 14px 40px;
-        outline: none;
-        color: white;
-        border-radius: 24px;
-        transition: 0.25s;
-        cursor: pointer;
+
+    body {
+        min-height: 100vh;
     }
-    .box input[type = "submit"]:hover{
-        background: #2ecc71;
+
+    /* .form-control:not(select) {
+        padding: 1.5rem 0.5rem;
+    } */
+
+    select.form-control {
+        height: 52px;
+        padding-left: 0.5rem;
     }
-    #trademark {
-        color: snow;
+
+    .form-control::placeholder {
+        color: #ccc;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
     }
 </style>
-<div>
-    <form class ="box" action="/signin" method="POST">
-    <h1>Login</h1>
-    <input type="text" name="username" placeholder="User Name">
-    <input type="password" name="password" placeholder="Password">
-    <input type="submit" name="submitButton" value="Login">
-    <a href="/signup">Signup As A New User</a>
-    </form>
+<br><br>
+<div class="container">
+    <div class="row py-5 mt-4 align-items-center">
+        <!-- For Demo Purpose -->
+        <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
+            <img src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg" alt="" class="img-fluid mb-3 d-none d-md-block">
+            <h1>Sign In</h1>
+            <p class="font-italic text-muted mb-0">SignIn at BOCTOR</p>
+        </div>
+
+        <!-- Registeration Form -->
+        <div class="col-md-7 col-lg-6 ml-auto">
+            <form id="signin" method="POST" action="/signin">
+                <div class="row">
+
+                    <!-- User Name -->
+                    <div class="input-group col-lg-6 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-user text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="firstName" type="text" name="username" placeholder="User Name" class="form-control bg-white border-left-0 border-md">
+                    </div>
+
+
+                    <!-- Password -->
+                    <div class="input-group col-lg-6 mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white px-4 border-md border-right-0">
+                                <i class="fa fa-lock text-muted"></i>
+                            </span>
+                        </div>
+                        <input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md">
+                    </div>
+
+                <!-- Submit Button -->
+                <div class="form-group col-lg-12 mx-auto mb-0">
+                    <button class="btn btn-primary btn-block py-2" id="register" name="submitButton">
+                        <span class="font-weight-bold">Login</span>
+                    </button>
+                </div>
+                    
+
+                    <!-- Divider Text -->
+                    <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
+                        <div class="border-bottom w-100 ml-5"></div>
+                        <span class="px-2 small text-muted font-weight-bold text-muted">OR</span>
+                        <div class="border-bottom w-100 mr-5"></div>
+                    </div>
+                    
+                    <!-- Already Registered -->
+                    <div class="text-center w-100">
+                        <p class="text-muted font-weight-bold">Want to enjoy the features? 
+                            <a href="/signup"class="text-primary ml-2">Create an Account</a>
+                        </p>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <% include partials/footer %>

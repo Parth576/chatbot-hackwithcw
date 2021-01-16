@@ -1,5 +1,8 @@
 <% include partials/header %>
-<style>
+
+
+
+ <style>
     #button {
         text-align: center;
     }
@@ -36,71 +39,82 @@
         margin-top: 1%;
         font-size: 150%;
     }
-</style>
-<div class="container">
-    <div class="row">
-        <h1 style="text-align: center"><u>Doctor Details</u></h1>
-        <div style="width: 70%; margin: 25px auto;">
+</style> 
+<div class="section lb">
+    <div class="container">
+        <div class="row">
+            <h1 style="text-align: center"><u>Doctor Details</u></h1>
+            <div style="width: 70%; margin: 25px auto;">
                 <legend>Add a brief description</legend>
-            <form id="form" action="/details/<%= pm.id %>" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <textarea class="textarea" form="form" class="form-control" name="description" placeholder="Description" required></textarea>
-                </div>
-                <fieldset>
-                    <legend>Choose your timings</legend>
+                <form id="form" action="/details/<%= pm.id %>" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <table>
-                            <tr>
-                                <td>Monday</td>
-                                <td class="pding"><input class="chbx" id="CHECK" name="id0" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="id0from" type="number"> <label>To</label> <input name="id0to" type="number"></td>
-                            </tr>
-                            <tr>
+                        <textarea class="textarea" form="form" class="form-control" name="description"
+                            placeholder="Description" required></textarea>
+                    </div>
+                    <fieldset>
+                        <legend>Choose your timings</legend>
+                        <div class="form-group">
+                            <table>
+                                <tr>
+                                    <td>Monday</td>
+                                    <td class="pding"><input class="chbx" id="CHECK" name="id0" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id0from"
+                                            type="number"> <label>To</label> <input name="id0to" type="number"></td>
+                                </tr>
+                                <tr>
                                     <td>Tuesday</td>
                                     <td class="pding"><input class="chbx" name="id1" type="checkbox"></td>
-                                    <td class="notVisible time pding"><label>From</label> <input name="id1from" type="number"> <label>To</label> <input name="id1to" type="number"></td>
-                            </tr>
-                            <tr>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id1from"
+                                            type="number"> <label>To</label> <input name="id1to" type="number"></td>
+                                </tr>
+                                <tr>
                                     <td>Wednesday</td>
                                     <td class="pding"><input class="chbx" name="id2" type="checkbox"></td>
-                                    <td class="notVisible time pding"> <label>From</label> <input name="id2from" type="number"> <label>To</label> <input name="id2to" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td>Thursday</td>
-                                <td class="pding"><input class="chbx" name="id3" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="id3from" type="number"> <label>To</label> <input name="id3to" type="number"></td>
-                            </tr>
-                            <tr>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id2from"
+                                            type="number"> <label>To</label> <input name="id2to" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>Thursday</td>
+                                    <td class="pding"><input class="chbx" name="id3" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id3from"
+                                            type="number"> <label>To</label> <input name="id3to" type="number"></td>
+                                </tr>
+                                <tr>
                                     <td>Friday</td>
                                     <td class="pding"><input class="chbx" name="id4" type="checkbox"></td>
-                                    <td class="notVisible time pding"> <label>From</label> <input name="id4from" type="number"> <label>To</label> <input name="id4to" type="number"></td>
+                                    <td class="notVisible time pding"> <label>From</label> <input name="id4from"
+                                            type="number"> <label>To</label> <input name="id4to" type="number"></td>
                                 </tr>
-                            <tr>
-                                <td>Saturday</td>
-                                <td class="pding"><input class="chbx" name="id5" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="id5from" type="number"> <label>To</label> <input name="id5to" type="number"></td>
-                            </tr>
-                            <tr>
-                                <td>Sunday</td>
-                                <td class="pding"><input class="chbx" name="id6" type="checkbox"></td>
-                                <td class="notVisible time pding"><label>From</label> <input name="id6from" type="number"> <label>To</label> <input name="id6to" type="number"></td>
-                            </tr>    
-                        </table>
-                        <div class="form-group">
-                            <legend style="margin-top: 1%;">Address</legend>
-                            <textarea class="textarea" form="form" name="address" placeholder="Address" id=""></textarea>
+                                <tr>
+                                    <td>Saturday</td>
+                                    <td class="pding"><input class="chbx" name="id5" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id5from"
+                                            type="number"> <label>To</label> <input name="id5to" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>Sunday</td>
+                                    <td class="pding"><input class="chbx" name="id6" type="checkbox"></td>
+                                    <td class="notVisible time pding"><label>From</label> <input name="id6from"
+                                            type="number"> <label>To</label> <input name="id6to" type="number"></td>
+                                </tr>
+                            </table>
+                            <div class="form-group">
+                                <legend style="margin-top: 1%;">Address</legend>
+                                <textarea class="textarea" form="form" name="address" placeholder="Address"
+                                    id=""></textarea>
+                            </div>
+                            <div class="form-group">
+                                <legend id="lbl" for="image">Profile Photo</legend>
+                                <input type="file" cl id="image" name="image" accept="image/*" required>
+                            </div>
+
                         </div>
-                        <div class="form-group">
-                            <legend id="lbl" for="image">Profile Photo</legend>
-                            <input type="file" cl id="image" name="image" accept="image/*" required>
-                        </div>
-                        
+                    </fieldset>
+                    <div style="text-align: center">
+                        <button style="width: 20%" class="submitButton">Submit</button>
                     </div>
-                </fieldset>
-                <div style="text-align: center">
-                    <button style="width: 20%" class="submitButton">Submit</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -140,5 +154,6 @@
     chbxs[6].addEventListener("click", function() {
         timeIn[6].classList.toggle("notVisible");
     });
+
 </script>
 <% include partials/footer %>

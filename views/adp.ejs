@@ -56,35 +56,38 @@
         font-size: 120%;
     }
 </style>
-<div class="container">
-    <div class="row">
-        <div style="width: 70%; margin: 25px auto;">
-            <% if(appointment.status == "R"){
+<div class="section lb">
+    <div class="container">
+        <div class="row">
+            <div style="width: 70%; margin: 25px auto;">
+                <% if(appointment.status == "R"){
                 var d = appointment.appointmentdate;
                 var month=d.getMonth()+1;
                 %>
                 <div class="form-group">
                     <p class="brdr">Your Appointment With Doctor <%= appointment.doctorname%> Scheduled on Date
                         <%= d.getDate() + "/" + month + "/" + d.getFullYear()%>
-                    Has Been Rejected By Doctor</p>
+                        Has Been Rejected By Doctor</p>
                 </div>
                 <% }%>
                 <% if(appointment.status == "NC"){
                     var d = appointment.appointmentdate;
                     var month=d.getMonth()+1;
                     %>
-                    <div class="form-group">
-                        <p class="msg brdr">Your appointment with Dr <%= appointment.doctorname%> scheduled on <%= d.getDate() + " / " + month + " / " + d.getFullYear()%>
-                        has not yet been confirmed.</p><p>Please wait for a response!</p>
-                    </div>
-                    <% }%>
-            <% if(appointment.status == "C"){
+                <div class="form-group">
+                    <p class="msg brdr">Your appointment with Dr <%= appointment.doctorname%> scheduled on
+                        <%= d.getDate() + " / " + month + " / " + d.getFullYear()%>
+                        has not yet been confirmed.</p>
+                    <p>Please wait for a response!</p>
+                </div>
+                <% }%>
+                <% if(appointment.status == "C"){
                 var p = appointment.appointmentdate;
                 var month=p.getMonth()+1;%>
                 <div class="form-group">
                     <p class="brdr">Your Appointment With Doctor <%= appointment.doctorname%> Scheduled on Date
                         <%= p.getDate() + "/" + month + "/" + p.getFullYear()%>
-                    Has Been Confirmed By Doctor</p>
+                        Has Been Confirmed By Doctor</p>
                 </div>
                 <div>
                     <p class="brdr">Your Appointment Time : <%= appointment.time %></p>
@@ -93,43 +96,45 @@
                     <p>Please Be Present At The Clinic At The Assigned Appointment Time %></p>
                 </div>
                 <a class="btn btn-success" href="/videoCall/<%= appointment._id %>">Or Join Virtual Meet</a>
-           <% }%>
-            <% if(appointment.status == "CNF"){
+                <% }%>
+                <% if(appointment.status == "CNF"){
                 var d = appointment.appointmentdate;
                 var month=d.getMonth()+1;
                 var p = appointment.bookingdate;
                 var Month=p.getMonth()+1; %>
-                    <div class="form-group">
-                        <p class="brdr">Booking Date: <%= p.getDate() + " / " + Month + " / " + p.getFullYear()%></p>
-                    </div>
-                    <div class="form-group">
-                        <p class="brdr">Appointment Date: <%= d.getDate() + " / " + month + " / " + d.getFullYear()%></p>
-                    </div>
-                    <h1 style="text-align: center"><u>About the doctor</u></h1>
-                    <div class="form-group">
-                        <p class="brdr">Name: <%= appointment.doctorname%></p>
-                        <p class="b">Contact Number: <%= appointment.doctorcn%></p>
-                    </div>
-                    <h1 style="text-align: center"><u>Description</u></h1>
-                    <div class="form-group">
-                        <p class="brdr"><%= appointment.description%></p>
-                    </div>
-    
-                    <h1 style="text-align: center"><u>Prescribed medication</u></h1>
-                    <div class="form-group">
-                        <p class="brdr"><%= appointment.prescription%></p>
-                    </div>
-    
-                    <h1 style="text-align: center"><u>Consulting charges</u></h1>
-                    <div class="form-group">
-                        <p class="brdr">₹<%= appointment.billamount%></p>
-                    </div>
-                        <p>
-                            <a name="status" value="CNF" class="btn btn-success" href="/doctors/<%= appointment.doctorid %>/<%= appointment._id %>/newreview">Leave a review</a>
-                        </p>
-                        </div>
-                    <% }%>
+                <div class="form-group">
+                    <p class="brdr">Booking Date: <%= p.getDate() + " / " + Month + " / " + p.getFullYear()%></p>
+                </div>
+                <div class="form-group">
+                    <p class="brdr">Appointment Date: <%= d.getDate() + " / " + month + " / " + d.getFullYear()%></p>
+                </div>
+                <h1 style="text-align: center"><u>About the doctor</u></h1>
+                <div class="form-group">
+                    <p class="brdr">Name: <%= appointment.doctorname%></p>
+                    <p class="b">Contact Number: <%= appointment.doctorcn%></p>
+                </div>
+                <h1 style="text-align: center"><u>Description</u></h1>
+                <div class="form-group">
+                    <p class="brdr"><%= appointment.description%></p>
+                </div>
+
+                <h1 style="text-align: center"><u>Prescribed medication</u></h1>
+                <div class="form-group">
+                    <p class="brdr"><%= appointment.prescription%></p>
+                </div>
+
+                <h1 style="text-align: center"><u>Consulting charges</u></h1>
+                <div class="form-group">
+                    <p class="brdr">₹<%= appointment.billamount%></p>
+                </div>
+                <p>
+                    <a name="status" value="CNF" class="btn btn-success"
+                        href="/doctors/<%= appointment.doctorid %>/<%= appointment._id %>/newreview">Leave a review</a>
+                </p>
+            </div>
+            <% }%>
         </div>
+    </div>
     </div>
 </div>
 <% include partials/footer %>
